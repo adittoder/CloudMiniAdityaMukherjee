@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Marketing Platform</title>
+    <style>
+        /* Internal CSS for styling the page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        section {
+            margin: 20px;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        h1, h2 {
+            font-size: 24px;
+        }
+
+        textarea {
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Email Marketing Dashboard</h1>
+    </header>
+
+    <section id="form-section">
+        <h2>Sign Up for Email Marketing</h2>
+        <form id="emailForm" action="send-email.php" method="POST">
+            <input type="email" name="email" placeholder="Enter email" required>
+            <input type="text" name="campaign_name" placeholder="Campaign Name" required>
+            <textarea name="email_content" placeholder="Enter Email Content" required></textarea>
+            <button type="submit">Send Campaign</button>
+        </form>
+    </section>
+
+    <section id="history">
+        <h2>Email Campaign History</h2>
+        <table id="campaign-table">
+            <tr>
+                <th>Campaign Name</th>
+                <th>Status</th>
+                <th>Sent Date</th>
+            </tr>
+            <!-- Future rows will be added dynamically here -->
+        </table>
+    </section>
+
+    <script>
+        document.getElementById("emailForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let email = document.querySelector("input[name='email']").value;
+            let campaignName = document.querySelector("input[name='campaign_name']").value;
+            let content = document.querySelector("textarea[name='email_content']").value;
+
+            // AJAX request to backend (send email)
+            fetch("send-email.php", {
+                method: "POST",
+                body: new URLSearchParams({
+                    email: email,
+                    campaign_name: campaignName,
+                    email_content: content
+                }),
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
